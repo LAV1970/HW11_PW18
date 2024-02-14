@@ -1,4 +1,6 @@
+from crud import create_contact, get_contacts, get_contact
 from fastapi import FastAPI, HTTPException, Depends
+from pydantic import model_serializer, model_validator
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, Session, sessionmaker, relationship
 from typing import List
@@ -34,3 +36,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@app.post("/contacts/", response_model=model_serializer.Contact)
+def create_contact(
+    contact: model_validator.ContactCreate, db: Session = Depends(get_db)
+):
+    return crud.create_contact(db, contact.dict())
