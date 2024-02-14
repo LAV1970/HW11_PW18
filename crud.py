@@ -1,10 +1,9 @@
-from msilib import schema
 from sqlalchemy.orm import Session
-from . import models
+from .models import Contact
 
 
-def create_contact(db: Session, contact: schema.ContactCreate):
-    db_contact = models.Contact(**contact.dict())
+def create_contact(db: Session, contact_data: dict):
+    db_contact = Contact(**contact_data)
     db.add(db_contact)
     db.commit()
     db.refresh(db_contact)
@@ -12,8 +11,8 @@ def create_contact(db: Session, contact: schema.ContactCreate):
 
 
 def get_contacts(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Contact).offset(skip).limit(limit).all()
+    return db.query(Contact).offset(skip).limit(limit).all()
 
 
 def get_contact(db: Session, contact_id: int):
-    return db.query(models.Contact).filter(models.Contact.id == contact_id).first()
+    return db.query(Contact).filter(Contact.id == contact_id).first()
