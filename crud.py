@@ -1,4 +1,6 @@
 from sqlalchemy.orm import Session
+from main import get_db
+from main import Contact
 from .models import Contact
 
 
