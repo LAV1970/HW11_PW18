@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Date
+from click import DateTime
+from sqlalchemy import Column, Integer, String, Date, func
 from database import Base
 
 
@@ -8,6 +9,6 @@ class Contact(Base):
     id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, index=True)
     last_name = Column(String, index=True)
-    email = Column(String, index=True, unique=True)
-    phone_number = Column(String, index=True, unique=True)
-    birthday = Column(Date)
+    email = Column(String, index=True)
+    phone_number = Column(String)
+    birthday = Column(DateTime(timezone=True), server_default=func.now())
