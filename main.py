@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.orm import declarative_base, Session, sessionmaker
 from typing import List
 from datetime import datetime, timedelta
-
+from models import Contact
 import crud
 
 DATABASE_URL = "sqlite:///./test.db"
