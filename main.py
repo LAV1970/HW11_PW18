@@ -4,6 +4,13 @@ from pydantic import model_serializer, model_validator
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, Session, sessionmaker, relationship
 from typing import List
+from crud import (
+    create_contact,
+    get_contacts,
+    get_contact,
+    update_contact,
+    delete_contact,
+)
 
 DATABASE_URL = "sqlite:///./test.db"
 
