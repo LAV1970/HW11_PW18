@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException
 from pydantic import model_serializer, model_validator
 from sqlalchemy.orm import Session
-
+from main import Contact as MainContact
 from models import Contact
 
 

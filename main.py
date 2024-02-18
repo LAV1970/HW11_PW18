@@ -1,5 +1,5 @@
-import crud
 from fastapi import FastAPI, Depends
+from . import crud
 from pydantic import model_serializer, model_validator
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, Session, sessionmaker, relationship
@@ -11,6 +11,8 @@ from crud import (
     update_contact,
     delete_contact,
 )
+
+app = FastAPI()
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -50,3 +52,9 @@ def create_contact(
     contact: model_validator.ContactCreate, db: Session = Depends(get_db)
 ):
     return crud.create_contact(db, contact.dict())
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
