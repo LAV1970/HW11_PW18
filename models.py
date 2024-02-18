@@ -1,5 +1,4 @@
-from click import DateTime
-from sqlalchemy import Column, Integer, String, Date, func
+from sqlalchemy import Column, Integer, String, DateTime, func
 from database import Base
 
 
