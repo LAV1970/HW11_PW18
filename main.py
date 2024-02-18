@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends
-from . import crud
-from pydantic import ContactSerializer, ContactValidator
+from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, Session, sessionmaker
 from typing import List
@@ -19,17 +18,13 @@ class Contact(Base):
     email = Column(String)
 
 
-# Создаем базу данных
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(bind=engine)
-
-# Создаем сессию базы данных
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 app = FastAPI()
 
 
-# Dependency to get the database session
 def get_db():
     db = SessionLocal()
     try:
@@ -38,9 +33,10 @@ def get_db():
         db.close()
 
 
-@app.post("/contacts/", response_model=ContactSerializer)
-def create_contact(contact: ContactValidator, db: Session = Depends(get_db)):
-    return crud.create_contact(db, contact.dict())
+class ContactValidator(BaseModel):
+    name: str
+    phone: str
+    email: str
 
 
 if __name__ == "__main__":
