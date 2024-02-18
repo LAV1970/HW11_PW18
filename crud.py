@@ -1,9 +1,8 @@
 from fastapi import Depends, HTTPException
 from pydantic import model_serializer, model_validator
 from sqlalchemy.orm import Session
-from main import get_db
-from main import Contact
-from .models import Contact
+
+from models import Contact
 
 
 def create_contact(db: Session, contact_data: dict):
