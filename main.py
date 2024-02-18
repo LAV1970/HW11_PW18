@@ -1,8 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.orm import declarative_base, Session, sessionmaker
 from typing import List
+from datetime import datetime, timedelta
+
+import crud
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -16,6 +19,7 @@ class Contact(Base):
     name = Column(String, index=True)
     phone = Column(String)
     email = Column(String)
+    birthday = Column(Date)
 
 
 engine = create_engine(DATABASE_URL)
@@ -92,6 +96,38 @@ def delete_contact(contact_id: int, db: Session = Depends(get_db)):
     db.delete(contact)
     db.commit()
     return contact
+
+
+@app.get("/contacts/", response_model=List[ContactValidator])
+def get_contacts(
+    query: str = Query(
+        None, title="Search Query", description="Search by name, last name, or email"
+    ),
+    db: Session = Depends(get_db),
+):
+    # Если запрос поиска не пустой, выполняем поиск
+    if query:
+        contacts = crud.get_contacts_by_query(db, query)
+    else:
+        # Если запрос поиска пустой, возвращаем все контакты
+        contacts = crud.get_all_contacts(db)
+
+    return contacts
+
+
+@app.get("/contacts/birthdays/", response_model=List[ContactValidator])
+def get_upcoming_birthdays(db: Session = Depends(get_db)):
+    # Получаем текущую дату
+    current_date = datetime.now()
+
+    # Получаем дату через 7 дней
+    seven_days_later = current_date + timedelta(days=7)
+
+    # Здесь реализуем логику поиска контактов с днями рождения на ближайшие 7 дней
+    # Пример: crud.get_upcoming_birthdays(db, current_date, seven_days_later)
+    upcoming_birthdays = crud.get_upcoming_birthdays(db, current_date, seven_days_later)
+
+    return upcoming_birthdays
 
 
 if __name__ == "__main__":
