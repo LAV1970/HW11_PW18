@@ -1,18 +1,9 @@
 from fastapi import FastAPI, Depends
 from . import crud
-from pydantic import model_serializer, model_validator
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import declarative_base, Session, sessionmaker, relationship
+from pydantic import ContactSerializer, ContactValidator
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, Session, sessionmaker
 from typing import List
-from crud import (
-    create_contact,
-    get_contacts,
-    get_contact,
-    update_contact,
-    delete_contact,
-)
-
-app = FastAPI()
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -47,10 +38,8 @@ def get_db():
         db.close()
 
 
-@app.post("/contacts/", response_model=model_serializer.Contact)
-def create_contact(
-    contact: model_validator.ContactCreate, db: Session = Depends(get_db)
-):
+@app.post("/contacts/", response_model=ContactSerializer)
+def create_contact(contact: ContactValidator, db: Session = Depends(get_db)):
     return crud.create_contact(db, contact.dict())
 
 
