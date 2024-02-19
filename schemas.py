@@ -5,6 +5,7 @@ class ContactBase(BaseModel):
     name: str
     phone: str
     email: str
+    birthday: str
 
 
 class ContactCreate(ContactBase):
