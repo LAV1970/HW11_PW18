@@ -1,11 +1,12 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class ContactBase(BaseModel):
-    name: str
-    phone: str
-    email: str
-    birthday: str
+    name: str  # Имя контакта
+    phone: str  # Номер телефона контакта
+    email: str  # Email контакта
+    birthday: Optional[str]  # День рождения контакта, необязательное поле
 
 
 class ContactCreate(ContactBase):
@@ -13,7 +14,7 @@ class ContactCreate(ContactBase):
 
 
 class Contact(ContactBase):
-    id: int
+    id: int  # Идентификатор контакта
 
     class Config:
         orm_mode = True
