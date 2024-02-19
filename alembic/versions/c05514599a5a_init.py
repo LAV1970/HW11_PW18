@@ -22,6 +22,22 @@ def has_index(index_name):
     return index_name in inspector.get_indexes("contacts")
 
 
+def create_table_if_not_exists():
+    # Use raw SQL to check if the table "_alembic_tmp_contacts" exists before creating it
+    op.execute(
+        """
+        CREATE TABLE IF NOT EXISTS _alembic_tmp_contacts (
+            id INTEGER NOT NULL,
+            email VARCHAR,
+            first_name VARCHAR,
+            last_name VARCHAR,
+            phone_number VARCHAR,
+            PRIMARY KEY (id)
+        )
+        """
+    )
+
+
 def upgrade():
     with op.batch_alter_table("contacts") as batch_op:
         # Drop index only if it exists
