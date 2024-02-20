@@ -50,7 +50,7 @@ def upgrade():
         batch_op.drop_column("name")
         batch_op.drop_column("phone")
 
-    # Use raw SQL to check if the table "_alembic_tmp_contacts" exists before creating it
+    # Use raw SQL to create or replace the table "_alembic_tmp_contacts"
     op.execute(
         """
         CREATE TABLE IF NOT EXISTS _alembic_tmp_contacts (
